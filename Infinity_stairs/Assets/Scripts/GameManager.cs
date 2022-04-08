@@ -1,12 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
 
 
     public bool Game_Start = false; //게임시작체크
+
+    public float Current_Time = 0.0f; //현재 남은 시간을 의미
+
+    public float Destination_Time = 10.0f; //전체시간
+
+    public float Add_Time_Flow = 0.001f; // 감소 시간
+
+    public Slider Slider; // 시간 
+
+    public Text Text;
+
+    public int Score = 0;
 
     public GameObject Character; // 캐릭터
 
@@ -37,6 +50,21 @@ public class GameManager : MonoBehaviour
             {
                 Check_Platform(Character_Pos_Idx, 0);
             }
+
+            Destination_Time = Destination_Time - Add_Time_Flow;
+            Current_Time = Current_Time - Time.deltaTime;
+
+            Slider.value =  Current_Time / Destination_Time;
+
+            if(Current_Time < 0f){
+                Result();
+            }
+
+          
+        }else{
+            if(Input.GetKeyDown(KeyCode.Space)){
+                init();
+            }
         }
     }
 
@@ -65,7 +93,12 @@ public class GameManager : MonoBehaviour
             Next_Platform(Pos_Idx);
         }
 
+        Destination_Time = 10.0f;
+        Current_Time = Destination_Time;
+
         Character_Pos_Idx = 0;
+        Score = 0;
+        Text.text = Score.ToString();
         Game_Start = true;
     }
 
@@ -119,6 +152,8 @@ public class GameManager : MonoBehaviour
             }
 
         }
+        Score++;
+        Text.text = Score.ToString();
         Pos_Idx++;
     }
 
