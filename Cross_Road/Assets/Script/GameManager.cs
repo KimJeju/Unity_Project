@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
                 Platform_Check_List.Add(0);
         }
 
+        Platform.SetActive(false);
+
     }
 
     public void init() {
@@ -44,15 +46,68 @@ public class GameManager : MonoBehaviour
             for(int w = 0; w < Width; w++)
             {
                 Platform_List[Width * h + w].transform.position = new Vector3(-(Width - 1) / 2f + w, -0.5f,h);
+                Set_Platform(Width * h + w,Color.green);
             }
         }
         
-        Character.transform.position = new Vector3(0f,-0.5f,0f);
+        Character.transform.position = new Vector3(0f,0.5f,0f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            Move(0);
+        }
+          if(Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            Move(1);
+        }
+          if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Move(2);
+        }
     }
+
+    public void Move(int direction) 
+    {
+        switch (direction)
+        {
+            case 0:
+            if(restrict(Vector3.left))
+            {
+            Character.transform.position += Vector3.left; // Vector3(-1,0,0)
+            }
+            break;
+
+            case 1:
+            if(restrict(Vector3.right))
+            {
+            Character.transform.position += Vector3.right; // Vector3(-1,0,0)
+            }
+            break;
+
+            case 2:
+            Character.transform.position += Vector3.forward; // Vector3(-1,0,0)
+            break;
+        }
+    }
+
+    bool restrict(Vector3 diraction)
+    {
+        Vector3 move_Pos = Character.transform.position + diraction;
+        if(move_Pos.x > Width / 2 || move_Pos.x < -Width / 2 ){
+             return false;
+        }else {
+            return true;
+        }
+    }
+
+    void Set_Platform(int idx,Color color)
+    {
+        Platform_List[idx].GetComponent<MeshRenderer>().material.color = color;
+    }
+
+   
 }
