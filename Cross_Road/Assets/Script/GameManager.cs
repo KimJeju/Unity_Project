@@ -21,11 +21,14 @@ public class GameManager : MonoBehaviour
 
     public GameObject DeadLine;
 
-    public float DeadLine_Speed = 1.0f; // 다가오는 벽의 스피드
+    public float DeadLine_Speed = 10.0f; // 다가오는 벽의 스피드
 
-    public float DeadLine_Speed_Max = 3.0f; // 다가오는 벽의 최고 스피드
+    public float DeadLine_Speed_Max = 30.0f; // 다가오는 벽의 최고 스피드
 
-    public float DeadLine_Speed_Accel = 0.1f; // 다가오는 벽에 추가되는 속도
+    public float DeadLine_Speed_Accel = 10.0f; // 다가오는 벽에 추가되는 속도
+
+    public int Score;
+    public Text Scoretext;
 
     void Start()
     {
@@ -63,6 +66,9 @@ public class GameManager : MonoBehaviour
         Character.transform.position = new Vector3(0f, 0.5f, 0f);
         DeadLine.transform.position = new Vector3(0f, 0.5f, -3f); //데드라인 초기위치
         DeadLine.transform.localScale = new Vector3(Width, 1f, 1f);
+
+        Score = 0;
+        Scoretext.text = Score.ToString();
 
         GameStart = false;
     }
@@ -127,9 +133,19 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        Check_Platform((int)(Width * (Character.transform.position.z % height) + Character.transform.position.x + Width / 2));
+
         if (next_Platform == true)
         {
             Next_Platform((int)Character.transform.position.z);
+        }
+    }
+
+    void Check_Platform(int idx)
+    {
+        if(Platform_Check_List[idx] == 1)
+        {
+            Result();
         }
     }
 
@@ -140,6 +156,9 @@ public class GameManager : MonoBehaviour
             Platform_List[((character_z -1) % height) * Width + i].transform.position = new Vector3(-Width / 2 +i, -0.5f, (character_z -1) + height);
             Set_Platform((((character_z -1) % height) * Width + i), UnityEngine.Random.Range(0, 8));
         }
+
+        Score++;
+        Scoretext.text = Score.ToString();
     }
 
     bool restrict(Vector3 diraction)
@@ -175,6 +194,7 @@ public class GameManager : MonoBehaviour
     public void Result() 
     {
         Debug.Log("Game Over");
+        GameStart = false;
     }
 
 
