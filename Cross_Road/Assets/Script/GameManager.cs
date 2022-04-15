@@ -33,56 +33,74 @@ public class GameManager : MonoBehaviour
         init(); //초기화
     }
 
-    
+
     void Data_Load()
     {
-        for(int i = 0; i < Width * height; ++i)
+        for (int i = 0; i < Width * height; ++i)
         {
-                GameObject t_Obj = Instantiate(Platform, Vector3.zero, Quaternion.identity);
-                t_Obj.transform.parent = Platform_Parents;
-                Platform_List.Add(t_Obj);
-                Platform_Check_List.Add(0);
+            GameObject t_Obj = Instantiate(Platform, Vector3.zero, Quaternion.identity);
+            t_Obj.transform.parent = Platform_Parents;
+            Platform_List.Add(t_Obj);
+            Platform_Check_List.Add(0);
         }
 
         Platform.SetActive(false);
 
     }
 
-    public void init() {
-        for(int h = 0; h < height; h++)
+    private bool GameStart = false;
+    public void init()
+    {
+        for (int h = 0; h < height; h++)
         {
-            for(int w = 0; w < Width; w++)
+            for (int w = 0; w < Width; w++)
             {
-                Platform_List[Width * h + w].transform.position = new Vector3(-(Width - 1) / 2f + w, -0.5f,h);
-                Set_Platform(Width * h + w,Color.green);
+                Platform_List[Width * h + w].transform.position = new Vector3(-(Width - 1) / 2f + w, -0.5f, h);
+                Set_Platform(Width * h + w, 0);
             }
         }
-        
-        Character.transform.position = new Vector3(0f,0.5f,0f);
-        DeadLine.transform.position = new Vector3(0f,0.5f,-3f); //데드라인 초기위치
+
+        Character.transform.position = new Vector3(0f, 0.5f, 0f);
+        DeadLine.transform.position = new Vector3(0f, 0.5f, -3f); //데드라인 초기위치
         DeadLine.transform.localScale = new Vector3(Width, 1f, 1f);
+
+        GameStart = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            Move(0);
-        }
-          if(Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            Move(1);
-        }
-          if(Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            Move(2);
-        }
 
-        DeadLine.transform.position += Vector3.forward * DeadLine_Speed *Time.deltaTime;
+        if (GameStart)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                Move(0);
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                Move(1);
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                Move(2);
+            }
+
+            DeadLine.transform.position += Vector3.forward * DeadLine_Speed * Time.deltaTime; // 다가오는 벽의 이동
+            if (DeadLine_Speed < DeadLine_Speed_Max)
+            {
+                DeadLine_Speed += DeadLine_Speed_Accel;
+            }
+        }else {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                init();
+                GameStart = true;
+            }
+        }
     }
 
-    public void Move(int direction) 
+    public void Move(int direction)
     {
 
         bool next_Platform = false; // 키랙터의 전진여부
@@ -90,53 +108,74 @@ public class GameManager : MonoBehaviour
         switch (direction)
         {
             case 0:
-            if(restrict(Vector3.left))
-            {
-            Character.transform.position += Vector3.left; // Vector3(-1,0,0)
-            }
-            break;
+                if (restrict(Vector3.left))
+                {
+                    Character.transform.position += Vector3.left; // Vector3(-1,0,0)
+                }
+                break;
 
             case 1:
-            if(restrict(Vector3.right))
-            {
-            Character.transform.position += Vector3.right; // Vector3(-1,0,0)
-            }
-            break;
+                if (restrict(Vector3.right))
+                {
+                    Character.transform.position += Vector3.right; // Vector3(-1,0,0)
+                }
+                break;
 
             case 2:
-            Character.transform.position += Vector3.forward; // Vector3(-1,0,0)
-            next_Platform = true;
-            break;
+                Character.transform.position += Vector3.forward; // Vector3(-1,0,0)
+                next_Platform = true;
+                break;
         }
 
-        if(next_Platform == true)
+        if (next_Platform == true)
         {
             Next_Platform((int)Character.transform.position.z);
         }
-     }
+    }
 
-    void Next_Platform(int Character_z)
+    void Next_Platform(int character_z)
     {
-        for(int i = 0; i <= Width; i++)
+        for(int i=0; i < Width; i++)
         {
-            Platform_List[((Character_z - 1) % height) * Width + i].transform.position = new Vector3(-Width / 2 + i, -0.5f, (Character_z -1) + height);
+            Platform_List[((character_z -1) % height) * Width + i].transform.position = new Vector3(-Width / 2 +i, -0.5f, (character_z -1) + height);
+            Set_Platform((((character_z -1) % height) * Width + i), UnityEngine.Random.Range(0, 8));
         }
     }
 
     bool restrict(Vector3 diraction)
     {
         Vector3 move_Pos = Character.transform.position + diraction;
-        if(move_Pos.x > Width / 2 || move_Pos.x < -Width / 2 ){
-             return false;
-        }else {
+        if (move_Pos.x > Width / 2 || move_Pos.x < -Width / 2)
+        {
+            return false;
+        }
+        else
+        {
             return true;
         }
     }
 
-    void Set_Platform(int idx,Color color)
+    void Set_Platform(int idx,  int randomNum)
     {
-        Platform_List[idx].GetComponent<MeshRenderer>().material.color = color;
+        switch(randomNum)
+        {
+            case 1: //함정일 경우
+            Platform_List[idx].GetComponent<MeshRenderer>().material.color = Color.red;
+            Platform_Check_List[idx] = 1;
+            break;
+
+            default :
+            Platform_List[idx].GetComponent<MeshRenderer>().material.color = Color.green;
+            Platform_Check_List[idx] = 0;
+            break;
+
+        }
     }
 
-   
+    public void Result() 
+    {
+        Debug.Log("Game Over");
+    }
+
+
 }
