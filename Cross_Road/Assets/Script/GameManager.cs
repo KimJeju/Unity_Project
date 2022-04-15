@@ -19,6 +19,14 @@ public class GameManager : MonoBehaviour
 
     private List<int> Platform_Check_List = new List<int>(); //함정을 만들기 위한 체크리스트
 
+    public GameObject DeadLine;
+
+    public float DeadLine_Speed = 1.0f; // 다가오는 벽의 스피드
+
+    public float DeadLine_Speed_Max = 3.0f; // 다가오는 벽의 최고 스피드
+
+    public float DeadLine_Speed_Accel = 0.1f; // 다가오는 벽에 추가되는 속도
+
     void Start()
     {
         Data_Load(); //초반 데이터로드
@@ -51,6 +59,8 @@ public class GameManager : MonoBehaviour
         }
         
         Character.transform.position = new Vector3(0f,0.5f,0f);
+        DeadLine.transform.position = new Vector3(0f,0.5f,-3f); //데드라인 초기위치
+        DeadLine.transform.localScale = new Vector3(Width, 1f, 1f);
     }
 
     // Update is called once per frame
@@ -68,6 +78,8 @@ public class GameManager : MonoBehaviour
         {
             Move(2);
         }
+
+        DeadLine.transform.position += Vector3.forward * DeadLine_Speed *Time.deltaTime;
     }
 
     public void Move(int direction) 
@@ -101,7 +113,7 @@ public class GameManager : MonoBehaviour
         {
             Next_Platform((int)Character.transform.position.z);
         }
-    }
+     }
 
     void Next_Platform(int Character_z)
     {
