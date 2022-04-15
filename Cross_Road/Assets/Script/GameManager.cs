@@ -72,6 +72,9 @@ public class GameManager : MonoBehaviour
 
     public void Move(int direction) 
     {
+
+        bool next_Platform = false; // 키랙터의 전진여부
+
         switch (direction)
         {
             case 0:
@@ -90,7 +93,21 @@ public class GameManager : MonoBehaviour
 
             case 2:
             Character.transform.position += Vector3.forward; // Vector3(-1,0,0)
+            next_Platform = true;
             break;
+        }
+
+        if(next_Platform == true)
+        {
+            Next_Platform((int)Character.transform.position.z);
+        }
+    }
+
+    void Next_Platform(int Character_z)
+    {
+        for(int i = 0; i <= Width; i++)
+        {
+            Platform_List[((Character_z - 1) % height) * Width + i].transform.position = new Vector3(-Width / 2 + i, -0.5f, (Character_z -1) + height);
         }
     }
 
