@@ -18,23 +18,27 @@ public class Charactor : MonoBehaviour
 
   public float Attack_Speed; //플레이어 공격속도.
 
-  public void init()  // 함수 초기화
+  public void init(BigInteger hp, BigInteger damege)  // 함수 초기화
   {
-      HpMax = 100;
+      HpMax = hp;
       Hp = HpMax;
-      Damege = 10;
+      Damege = damege;
       Attack_Speed = 1.0f;
   } // 초기화를 위한 함수
 
-  public void GetHp(BigInteger Hp) // 현재 Hp가 HpMax보다 커지게된다면 HpMax와 동일하게 세팅해준다.
+  public void GetHp(BigInteger hp) // 현재 Hp가 HpMax보다 커지게된다면 HpMax와 동일하게 세팅해준다.
   {
-        Hp += Hp; 
+        Hp += hp; 
 
         if(Hp > HpMax)
         {
             Hp = HpMax;
         }
   } 
+
+ /*
+ GetDamage 메서드와 HitDamege 메서드는 플레어와 에너미가 동시에 상속 받을 메서드이다.
+ */
 
   public void getDamege(BigInteger damege) //받는 데미지를 표현하기 위한 메서드
   {
@@ -44,6 +48,11 @@ public class Charactor : MonoBehaviour
       {
           Dead();
       }
+  }
+
+  public void HitDamege(Charactor Target, BigInteger damege) // 데미지를 주는 메서드
+  {
+        Target.getDamege(damege);
   }
 
   
