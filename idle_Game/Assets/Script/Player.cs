@@ -34,6 +34,7 @@ public class Player : Charactor // 내가만든 플레이어 상속
             HitDamege(Target, Damege); // 어택스피드와 같아지면 HitDamege 함수 출력
             Attack_Cooltime = 0.0f; // 공격이 끝나면 초기화
         }
+        Debug.Log(HpMax + "/" + Target + "/" + Damege);
     }
 
     public override void Dead()
@@ -50,8 +51,13 @@ public class Player : Charactor // 내가만든 플레이어 상속
 
     }
 
-    public void LevelUp(){
-        HpMax += HpMax * GameManager.Instance.m_Player_Value.Level_Hp;
-        Damege += Damege * GameManager.Instance.m_Player_Value.Level_Damege;
+    public void LevelUp(string States){
+
+        if(States == "hp"){
+            HpMax += HpMax * GameManager.Instance.m_Player_Value.Level_Hp;
+        }else if(States == "Damege"){
+            Damege += Damege * GameManager.Instance.m_Player_Value.Level_Damege;
+
+        }
     }
 }

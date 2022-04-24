@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
         public BigInteger Level_Hp; // 레벨업 후 올라가는 체력량
         public BigInteger Level_Damege; // 레벨업 후 올라가는 데미지
 
+        public string States;
+
 
         public void Get_Gold(BigInteger Value, UnityEngine.Vector3 pos) //골드를 받기 위한 메서드, 1이 아닌 특정한 값을 받기위해 Biginteger Value를 받게 해준다.
         {
@@ -28,7 +30,11 @@ public class GameManager : MonoBehaviour
             {
                 Gold -= Level_Hp * 10;
                 Level_Hp += 1;
+                
+                States = "hp";
+                Player.Instance.LevelUp(States);
                 GameManager.Instance.Text_level_Hp.text = "Level HP : " + Level_Hp;
+                GameManager.Instance.Text_Gold.text = "Gold :" + Gold;
 
             }else{
                 GameManager.Instance.Set_Text("HP 레벨업을 위한 골드가 모자랍니다.");
@@ -42,6 +48,11 @@ public class GameManager : MonoBehaviour
                 Gold -= Level_Damege * 5;
                 Level_Damege += 1;
                 GameManager.Instance.Text_level_Damege.text = "Level Damege : " + Level_Damege;
+
+                States = "Damege";
+                Player.Instance.LevelUp(States);
+                GameManager.Instance.Text_level_Hp.text = "Level Damege : " + Level_Damege;
+                GameManager.Instance.Text_Gold.text = "Gold :" + Gold;
             }else{
                 GameManager.Instance.Set_Text("데미지 레벨업을 위한 골드가 모자랍니다.");
             }
