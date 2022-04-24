@@ -28,14 +28,17 @@ public class Charactor : MonoBehaviour
     public BigInteger Damege; // Player가 받은 데미지
 
     public float Attack_Speed; //플레이어 공격속도.
-
     public Charator_state State;
+    public BigInteger Gold;
+
+
     public void init(BigInteger hp, BigInteger damege)  // 함수 초기화
     {
         HpMax = hp;
         Hp = HpMax;
         Damege = damege;
         Attack_Speed = 1.0f;
+        Gold = 10;
         State = Charator_state.idle; //살아있는 상태라 가정
     } // 초기화를 위한 함수
 
@@ -80,7 +83,7 @@ public class Charactor : MonoBehaviour
     }
 
 
-    public void Dead()
+    public virtual void Dead() //데드라는 함수를 자식클래스에서 재정의 하기위해서 void앞에 Virtual이라는 키워드를 넣어준다.
     {
         Debug.Log("DEAD");
         State = Charator_state.death;

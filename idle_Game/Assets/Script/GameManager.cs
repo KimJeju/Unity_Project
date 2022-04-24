@@ -23,13 +23,24 @@ public class GameManager : MonoBehaviour
         }
         public void Get_LevelDamege() //데미지를 올리기 위한 메서드
         {
-            Level_Damege += 10;
+            Level_Damege += 1;
         }
     }
+
+    public static GameManager Instance; //게임매니저를 자료형으로 가지는 인스턴스 선언, Static 메서드로 정적으로 선언
+
+    public Player_Value m_Player_Value;
+
+    private void Awake() //첫번째 프레임이 호출되기전에 딱 한번 호출되는 유니티 내장함수, 모든상태와 게임을 초기화 해주기 위해 선언
+    {
+        Instance = this; //this는 게임매니저의 인스턴스
+    }
+    //GameManager.instance
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_Player_Value = new Player_Value(); //플레이어 벨류 초기화
     }
 
     // Update is called once per frame
