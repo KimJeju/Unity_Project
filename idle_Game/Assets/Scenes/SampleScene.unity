@@ -361,6 +361,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ffee03fd5f6834db9f50f2b897a079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Attack_Speed: 1
+  Target: {fileID: 1101266103}
 --- !u!65 &1042458884
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -469,6 +471,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182c10f286d04264598dfdfe3750e4ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Attack_Speed: 1
+  Target: {fileID: 1042458883}
 --- !u!135 &1101266104
 SphereCollider:
   m_ObjectHideFlags: 0
