@@ -37,7 +37,7 @@ public class Enermy : Charactor // MonoBehaviour 가 아닌 캐릭터를 타겟
     {
         base.Dead(); //base는 dead라는 키워드를 사용해 부모데드에서와 똑같이 사용되도록 한다.
         Debug.Log("Enermy Dead");
-        GameManager.Instance.m_Player_Value.Get_Gold(Gold);
+        GameManager.Instance.m_Player_Value.Get_Gold(Gold, this.transform.position);
         Spawn();
     }
 

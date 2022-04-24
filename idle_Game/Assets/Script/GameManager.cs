@@ -14,10 +14,11 @@ public class GameManager : MonoBehaviour
         public BigInteger Level_Damege; // 레벨업 후 올라가는 데미지
 
 
-        public void Get_Gold(BigInteger Value) //골드를 받기 위한 메서드, 1이 아닌 특정한 값을 받기위해 Biginteger Value를 받게 해준다.
+        public void Get_Gold(BigInteger Value, UnityEngine.Vector3 pos) //골드를 받기 위한 메서드, 1이 아닌 특정한 값을 받기위해 Biginteger Value를 받게 해준다.
         {
             Gold += Value;
             GameManager.Instance.Text_Gold.text = "Gold : " + Gold;
+            GameManager.Instance.Set_Text(Value.ToString(), pos);
 
         }
 
@@ -40,6 +41,9 @@ public class GameManager : MonoBehaviour
     public Text Text_level_Damege;
     public Player_Value m_Player_Value;
 
+    public Text Text_Damege; //데미지를 위한 텍스트
+    public List<Text> Text_List; //텍스트 데미지를 풀링하기 위한 리스트, 다시 생성되었던 리스트를 재활용하기위한 리스트
+
     private void Awake() //첫번째 프레임이 호출되기전에 딱 한번 호출되는 유니티 내장함수, 모든상태와 게임을 초기화 해주기 위해 선언
     {
         Instance = this; //this는 게임매니저의 인스턴스
@@ -59,5 +63,33 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+
+    public void Set_Text(String Text, UnityEngine.Vector3 pos) 
+    {
+        bool set = false;
+        foreach(Text t in Text_List)
+        {
+            if(!t.gameObject.activeSelf) // 게임오브젝트가 활성 or 비활성 인지 bool 값으로 알려줌
+            {
+                t.text = Text;
+                t.transform.position = Camera.main.WorldToScreenPoint(pos); //WorldTO == 3d 월드 자표를 2d로 바꿔줌
+                t.gameObject.SetActive(true); //게임오브젝트 활성화
+                set = true;
+                break;
+            }
+        }
+
+        if(!set)
+        {
+            Text t = Instantiate(Text_Damege,Camera.main.WorldToScreenPoint(pos), 
+                        UnityEngine.Quaternion.identity).GetComponent<Text>(); //게임오브젝트 복제 증가, 카메라 위치값, 정렬
+            t.transform.SetParent(Text_Damege.transform.parent);
+            t.text = Text;
+            Text_List.Add(t);
+        }
+         //텍스트리스트 순환
+        
     }
 }

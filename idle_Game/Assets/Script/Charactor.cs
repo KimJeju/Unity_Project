@@ -79,7 +79,7 @@ public class Charactor : MonoBehaviour
     public void HitDamege(Charactor Target, BigInteger damege) // 데미지를 주는 메서드
     {
         Target.getDamege(damege);
-        Debug.Log("Target State :" + Target.State + "hp :" + Target.Hp + "/" + damege);
+        GameManager.Instance.Set_Text(damege.ToString(), Target.transform.position);
     }
 
 
