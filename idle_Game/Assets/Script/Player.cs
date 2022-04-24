@@ -14,6 +14,12 @@ public class Player : Charactor // 내가만든 플레이어 상속
     // Update is called once per frame
     void Update()
     {
+        if(State == Charator_state.death) //죽어있는 상태라면 종료
+        {
+            return;
+        }
+
+
        if(Attack_Cooltime < Attack_Speed)
       {
           Attack_Cooltime += Time.deltaTime; // 쿨타임 증가하다 어택스피드와 같아지면 공격 실행
