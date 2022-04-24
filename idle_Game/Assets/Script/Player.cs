@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Player : Charactor // 내가만든 플레이어 상속
 {
+    public static Player Instance;
     public Charactor Target; // 캐릭터를 자료형으로 하는 타겟
+
+    private void Awake() {
+        Instance = this;
+    }
     void Start()
     {
         init(100, 1);
@@ -43,5 +48,10 @@ public class Player : Charactor // 내가만든 플레이어 상속
         Hp = HpMax;
         State = Charator_state.idle;
 
+    }
+
+    public void LevelUp(){
+        HpMax += HpMax * GameManager.Instance.m_Player_Value.Level_Hp;
+        Damege += Damege * GameManager.Instance.m_Player_Value.Level_Damege;
     }
 }

@@ -24,13 +24,28 @@ public class GameManager : MonoBehaviour
 
         public void Get_LevelHp() //레벨을 올리기 위한 메서드
         {
-            Level_Hp += 1;
-            GameManager.Instance.Text_level_Hp.text = "Level HP : " + Level_Hp;
+            if (Gold >= Level_Hp * 10)
+            {
+                Gold -= Level_Hp * 10;
+                Level_Hp += 1;
+                GameManager.Instance.Text_level_Hp.text = "Level HP : " + Level_Hp;
+
+            }else{
+                GameManager.Instance.Set_Text("HP 레벨업을 위한 골드가 모자랍니다.");
+            }
         }
         public void Get_LevelDamege() //데미지를 올리기 위한 메서드
         {
-            Level_Damege += 1;
-            GameManager.Instance.Text_level_Damege.text = "Level Damege : " + Level_Damege;
+
+            if (Gold >= Level_Damege * 5)
+            {
+                Gold -= Level_Damege * 5;
+                Level_Damege += 1;
+                GameManager.Instance.Text_level_Damege.text = "Level Damege : " + Level_Damege;
+            }else{
+                GameManager.Instance.Set_Text("데미지 레벨업을 위한 골드가 모자랍니다.");
+            }
+
 
         }
     }
@@ -56,7 +71,7 @@ public class GameManager : MonoBehaviour
         m_Player_Value = new Player_Value(); //플레이어 벨류 초기화
         GameManager.Instance.Text_Gold.text = "Gold :" + m_Player_Value.Gold;
         GameManager.Instance.Text_level_Hp.text = "Level HP :" + m_Player_Value.Level_Hp;
-        GameManager.Instance.Text_level_Damege.text = "Level Damege" + m_Player_Value.Level_Damege;
+        GameManager.Instance.Text_level_Damege.text = "Level Damege : " + m_Player_Value.Level_Damege;
     }
 
     // Update is called once per frame
@@ -65,31 +80,70 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void Btn_Level_Up_Hp()
+    {
+        m_Player_Value.Get_LevelHp();
+    }
 
-    public void Set_Text(String Text, UnityEngine.Vector3 pos) 
+    public void Btn_Level_Up_Damege()
+    {
+        m_Player_Value.Get_LevelDamege();
+    }
+
+
+    public void Set_Text(String Text, UnityEngine.Vector3 pos)
     {
         bool set = false;
-        foreach(Text t in Text_List)
+        foreach (Text t in Text_List)
         {
-            if(!t.gameObject.activeSelf) // 게임오브젝트가 활성 or 비활성 인지 bool 값으로 알려줌
+            if (!t.gameObject.activeSelf) // 게임오브젝트가 활성 or 비활성 인지 bool 값으로 알려줌
             {
                 t.text = Text;
                 t.transform.position = Camera.main.WorldToScreenPoint(pos); //WorldTO == 3d 월드 자표를 2d로 바꿔줌
-                t.gameObject.SetActive(true); //게임오브젝트 활성화
+                t.GetComponent<Controller_text>().init();
                 set = true;
                 break;
             }
         }
 
-        if(!set)
+        if (!set)
         {
-            Text t = Instantiate(Text_Damege,Camera.main.WorldToScreenPoint(pos), 
+            Text t = Instantiate(Text_Damege, Camera.main.WorldToScreenPoint(pos),
                         UnityEngine.Quaternion.identity).GetComponent<Text>(); //게임오브젝트 복제 증가, 카메라 위치값, 정렬
             t.transform.SetParent(Text_Damege.transform.parent);
             t.text = Text;
+            t.GetComponent<Controller_text>().init();
             Text_List.Add(t);
         }
-         //텍스트리스트 순환
-        
+        //텍스트리스트 순환
+
+    }
+
+     public void Set_Text(String Text) //메서드 오버로딩 :: 같은 이름의 메서드를 중복
+    {
+        bool set = false;
+        foreach (Text t in Text_List)
+        {
+            if (!t.gameObject.activeSelf) // 게임오브젝트가 활성 or 비활성 인지 bool 값으로 알려줌
+            {
+                t.text = Text;
+                t.transform.position = new UnityEngine.Vector2(Screen.width * 0.5f, Screen.height * 0.5f); //WorldTO == 3d 월드 자표를 2d로 바꿔줌
+                t.GetComponent<Controller_text>().init();
+                set = true;
+                break;
+            }
+        }
+
+        if (!set)
+        {
+            Text t = Instantiate(Text_Damege,  new UnityEngine.Vector2(Screen.width * 0.5f, Screen.height * 0.5f),
+                        UnityEngine.Quaternion.identity).GetComponent<Text>(); //게임오브젝트 복제 증가, 카메라 위치값, 정렬
+            t.transform.SetParent(Text_Damege.transform.parent);
+            t.text = Text;
+            t.GetComponent<Controller_text>().init();
+            Text_List.Add(t);
+        }
+        //텍스트리스트 순환
+
     }
 }
