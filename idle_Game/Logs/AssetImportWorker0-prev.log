@@ -444,3 +444,10 @@ Received Import Request.
   path: Assets/Script/Charactor.cs
   artifactKey: Guid(54c973df3465088458a20cdfd629ec65) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Script/Charactor.cs using Guid(54c973df3465088458a20cdfd629ec65) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '454b149b3472737f7420f70bb6704f58') in 0.004166 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 546.639885 seconds.
+  path: Assets/Script/Player.cs
+  artifactKey: Guid(182c10f286d04264598dfdfe3750e4ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Script/Player.cs using Guid(182c10f286d04264598dfdfe3750e4ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '13f4bdd489be39eaf519074467b48cf0') in 0.004932 seconds 
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file

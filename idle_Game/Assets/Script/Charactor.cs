@@ -20,10 +20,10 @@ public class Charactor : MonoBehaviour
 
   public void init(BigInteger hp, BigInteger damege)  // 함수 초기화
   {
-      HpMax = hp;
-      Hp = HpMax;
-      Damege = damege;
-      Attack_Speed = 1.0f;
+     HpMax = hp;
+        Hp = HpMax;
+        Damege = damege;
+        Attack_Speed = 1.0f;
   } // 초기화를 위한 함수
 
   public void GetHp(BigInteger hp) // 현재 Hp가 HpMax보다 커지게된다면 HpMax와 동일하게 세팅해준다.
